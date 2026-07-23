@@ -32,6 +32,14 @@ The AWS baseline runs in `us-east-1` as a single development environment.
 Its scope and technical constraints are recorded in the active
 [AI Together Framework V3 constitution](.framework/constitution/).
 
+## Shared functional contract
+
+The provider-neutral HTTP contract, processing responsibilities, and portable
+test payloads are defined in
+[`docs/contracts/order-pipeline-v1.md`](docs/contracts/order-pipeline-v1.md).
+It is the target for future provider implementations; the AWS baseline's
+current response and validation behavior are documented separately.
+
 ## Key architecture decisions
 
 The preserved AWS decisions and baseline behavior are documented in

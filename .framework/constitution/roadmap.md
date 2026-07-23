@@ -18,7 +18,7 @@ The AWS baseline was imported into an independent repository and reorganized und
 | 3 | Adopt AI Together Framework V3 in brownfield mode | Complete |
 | 4 | Migrate requirements, decisions, ADRs, and learnings from the inherited SDD process | Complete |
 | 5 | Retire standalone SDD governance after verified migration | Complete |
-| 6 | Define the shared functional order contract and test payloads | Pending |
+| 6 | Define the shared functional order contract and test payloads | Complete |
 | 7 | Design the GCP variant through an approved design ORQ | Pending |
 | 8 | Implement, validate, and manually test the GCP variant | Pending |
 | 9 | Create the Azure Free account after GCP is closed and learnings are recorded | Pending |
@@ -27,7 +27,11 @@ The AWS baseline was imported into an independent repository and reorganized und
 
 ## Next Work
 
-Define the shared functional order contract and test payloads before designing GCP. The AWS baseline remains the functional reference; provider equivalence is based on responsibility rather than service-name matching.
+Design the GCP variant through an approved design ORQ. The shared functional
+contract and portable test payloads are recorded in
+[`docs/contracts/order-pipeline-v1.md`](../../docs/contracts/order-pipeline-v1.md).
+The AWS baseline remains the functional reference; provider equivalence is
+based on responsibility rather than service-name matching.
 
 ## Dependencies and Risks
 
