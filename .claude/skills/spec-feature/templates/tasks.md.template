@@ -1,0 +1,20 @@
+# Tasks: {{feature_name}}
+
+> Status: Draft — pending architect review.
+> Depends on: this feature's `plan.md` (must be approved).
+> Each task should result in an atomic commit (Conventional Commits, in
+> English).
+
+- [ ] T1 — {{short description}}
+  - **Definition of done**: ...
+- [ ] T2 — ...
+  - **Definition of done**: ...
+
+## Feature final validation
+
+- [ ] `terraform fmt -check` reports no pending changes.
+- [ ] `terraform validate` reports no errors.
+- [ ] `terraform plan` runs without errors and the result is summarized
+      against `spec.md`'s acceptance criteria.
+- [ ] Results summary presented to the architect for approval (STOP —
+      wait for explicit OK before the next feature).

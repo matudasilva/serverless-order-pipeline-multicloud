@@ -1,0 +1,42 @@
+# Spec: {{feature_name}}
+
+> Status: Draft — pending architect review.
+
+## Review summary
+
+- **Decisions needing approval**: ...
+- **Deviations from the baseline/original exercise**: ...
+- **Key risks**: ...
+
+## What
+
+Concise description of the functionality this feature adds to the
+pipeline.
+
+## Why
+
+Motivation: which part of the PoC (Exercise 1) or of the portfolio's
+mission (see `specs/constitution.md`) this feature covers, and why it's
+needed at this point in the roadmap.
+
+## Scope
+
+- In scope: ...
+- Out of scope: ...
+
+## Functional requirements
+
+1. ...
+2. ...
+
+## Acceptance criteria (verifiable)
+
+- [ ] Criterion 1 — must be objectively verifiable (e.g. "`terraform
+      plan` reports no errors", "resource X exists with property Y",
+      "role Z's IAM policy doesn't use `Resource: \"*\"`").
+- [ ] Criterion 2 — ...
+
+## Open questions
+
+- List of decisions that need architect input before moving on to
+  `plan.md`. Empty this section before requesting approval.
