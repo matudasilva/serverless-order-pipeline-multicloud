@@ -4,11 +4,11 @@ on:
   push:
     branches: [main]
     paths:
-      - "envs/**"
+      - "providers/aws/envs/**"
       - ".github/workflows/terraform.yml"
   pull_request:
     paths:
-      - "envs/**"
+      - "providers/aws/envs/**"
       - ".github/workflows/terraform.yml"
 
 jobs:
@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: envs/dev
+        working-directory: providers/aws/envs/dev
     steps:
       - name: Checkout
         uses: actions/checkout@v4

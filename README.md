@@ -8,7 +8,7 @@ never asked for.
 
 ## Architecture
 
-<img src="docs/diagrams/architecture.png" width="500"
+<img src="providers/aws/docs/diagrams/architecture.png" width="500"
 alt="Solution architecture: Client to API Gateway to SQS to Lambda 1
 to DynamoDB to Lambda 2 to SNS to Email"/>
 
@@ -70,11 +70,12 @@ in each feature's `plan.md` under `specs/features/`. Headlines:
 
 ```
 specs/               # Constitution, tech stack, roadmap, and per-feature specs/plans/tasks (SDD)
-envs/dev/            # Terraform stack for the dev environment
+providers/aws/envs/dev/ # Terraform stack for the AWS dev environment
+providers/aws/src/lambdas/ # Python code (lambda_1: SQS -> DynamoDB, lambda_2: Streams -> SNS)
+providers/aws/docs/diagrams/ # AWS architecture diagram (Excalidraw source + PNG export)
+providers/aws/docs/reference/ # AWS reference material (original exercise baseline)
 modules/             # Reusable Terraform modules (only where justified — none needed yet)
-src/lambdas/         # Python code for the Lambdas (lambda_1: SQS -> DynamoDB, lambda_2: Streams -> SNS)
-docs/diagrams/       # Architecture and SDD workflow diagrams (Excalidraw sources + PNG exports)
-docs/reference/      # Reference material (original exercise baseline)
+docs/diagrams/       # Legacy SDD workflow diagram (Excalidraw source + PNG export)
 .github/workflows/   # CI (fmt + validate, no credentials, no apply)
 ```
 
@@ -85,7 +86,7 @@ Deployment is manual, by design — the coding agent never runs
 below). To stand this up in your own AWS account:
 
 ```bash
-cd envs/dev
+cd providers/aws/envs/dev
 terraform init
 
 # notification_email has no default on purpose — supply your own
@@ -115,7 +116,7 @@ This is a portfolio PoC, not a running service — destroy it when you're
 done to avoid incurring cost:
 
 ```bash
-cd envs/dev
+cd providers/aws/envs/dev
 terraform destroy
 ```
 
