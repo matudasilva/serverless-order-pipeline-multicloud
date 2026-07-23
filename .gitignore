@@ -30,3 +30,27 @@ __pycache__/
 
 # Claude Code local settings (machine-specific permissions)
 .claude/settings.local.json
+
+# AI Together Framework - local tooling and operational memory
+.framework/cache/
+.framework/tmp/
+.framework/local-state/
+.framework/v3-upgrade-backups/
+.framework/runtime/
+.framework/logs/
+.framework/local/
+.framework/orqs/
+.framework/orqs-v2/
+.framework/task-results/
+.framework/audits/
+.framework/working-notes/
+.framework/local-tools/
+.framework/*.local.md
+.framework/*.local.yml
+.framework/*.local.json
+.framework/governance.db
+.framework/constitution/.pending-init
+.framework/constitution/diagrams/*.candidate.svg
+.framework/constitution/diagrams/*.candidate.base
+.claude/skills/
+.codex/

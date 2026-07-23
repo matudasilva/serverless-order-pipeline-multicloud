@@ -1,0 +1,31 @@
+# Local-only materialization of resolvable Governance Sync target references.
+# Copy to .framework/project-config.local.yml. Never commit the materialized file or duplicate refs in .env.
+
+governance_sync:
+  targets:
+    learning:
+      canonical_name: Framework Learning / Insights
+      canonical_path: unset
+      ref: unset
+    dashboard:
+      canonical_name: ORQ Dashboard
+      canonical_path: unset
+      ref: unset
+    project_status:
+      canonical_name: Framework Project Status
+      canonical_path: unset
+      ref: unset
+
+# Optional external design reviewer. This file never stores credentials or executable commands.
+external_reviewer:
+  contract_version: 1
+  payload_classes:
+    orq-spec: false
+    orq-implementation: false
+  providers:
+    anthropic:
+      consent: false
+      model: default
+    openai:
+      consent: false
+      model: default
