@@ -1,10 +1,9 @@
-# serverless-order-pipeline-aws
+# serverless-order-pipeline-multicloud
 
 Starting from a classic AWS Architecting Solutions exercise, this repo
-explores what happens when you apply Spec-Driven Development and an AI
-coding agent to infrastructure work: better IAM scoping, an auditable
-decision trail, and architecture improvements the original exercise
-never asked for.
+evolves a working AWS pipeline into an auditable multicloud comparison.
+AWS is the functional baseline; GCP and Azure will preserve the same
+architectural responsibilities while using their native services.
 
 ## Architecture
 
@@ -29,26 +28,26 @@ Client --POST /orders--> API Gateway --SendMessage--> SQS (POC-Queue)
   publishes a notification to SNS's single email subscription — no
   polling anywhere in the pipeline.
 
-Region: `us-east-1` (single region, no multi-environment — see
-`specs/constitution.md` for the full scope decision).
+The AWS baseline runs in `us-east-1` as a single development environment.
+Its scope and technical constraints are recorded in the active
+[AI Together Framework V3 constitution](.framework/constitution/).
 
 ## Key architecture decisions
 
-The full decision log (with context, alternatives, and consequences) is
-in each feature's `plan.md` under `specs/features/`. Headlines:
+The preserved AWS decisions and baseline behavior are documented in
+[`providers/aws/docs/`](providers/aws/docs/). Headlines:
 
 - **Least privilege everywhere, with one documented exception.** Every
   IAM policy is scoped to the exact ARN of the resource it needs — no
   `Resource: "*"`, except for the account-level API Gateway CloudWatch
   role, which AWS structurally requires to have broader CloudWatch Logs
   permissions
-  ([`core-pipeline` ADR-2](specs/features/core-pipeline/plan.md),
-  [`api-ingestion` ADR-10](specs/features/api-ingestion/plan.md)).
+  ([decision record](providers/aws/docs/legacy-sdd-decisions.md)).
 - **Decoupling with a safety net.** SQS sits between the API and the
   processing Lambda, and `POC-Queue` has a dead-letter queue so a
   poison-pill message gets set aside after 5 failed attempts instead of
   retrying forever — a deliberate improvement over the original exercise
-  ([`core-pipeline` ADR-3](specs/features/core-pipeline/plan.md)).
+  ([decision record](providers/aws/docs/legacy-sdd-decisions.md)).
   Batch failures are reported per-message
   (`ReportBatchItemFailures`), so one bad order never blocks the rest of
   a batch.
@@ -59,23 +58,23 @@ in each feature's `plan.md` under `specs/features/`. Headlines:
   and API Gateway's access-log group are declared explicitly, with
   bounded retention and a `depends_on` that forces Terraform to create
   them before the resource that would otherwise create them implicitly
-  ([`core-pipeline` ADR-4](specs/features/core-pipeline/plan.md)).
+  ([decision record](providers/aws/docs/legacy-sdd-decisions.md)).
 - **Errors are explicit, not silent.** `api-ingestion`'s `200` response
   maps SQS's raw XML to JSON; because that response is now explicitly
   mapped, `400`/`500` are mapped too — an unmapped SQS error would
   otherwise surface as a misleading `200`
-  ([`api-ingestion` ADR-8](specs/features/api-ingestion/plan.md)).
+  ([decision record](providers/aws/docs/legacy-sdd-decisions.md)).
 
 ## Repo structure
 
 ```
-specs/               # Constitution, tech stack, roadmap, and per-feature specs/plans/tasks (SDD)
 providers/aws/envs/dev/ # Terraform stack for the AWS dev environment
 providers/aws/src/lambdas/ # Python code (lambda_1: SQS -> DynamoDB, lambda_2: Streams -> SNS)
 providers/aws/docs/diagrams/ # AWS architecture diagram (Excalidraw source + PNG export)
 providers/aws/docs/reference/ # AWS reference material (original exercise baseline)
+.framework/constitution/ # Active mission, technical constraints, roadmap, and framework diagrams
 modules/             # Reusable Terraform modules (only where justified — none needed yet)
-docs/diagrams/       # Legacy SDD workflow diagram (Excalidraw source + PNG export)
+docs/diagrams/       # Editable multicloud workflow diagram
 .github/workflows/   # CI (fmt + validate, no credentials, no apply)
 ```
 
@@ -122,49 +121,33 @@ terraform destroy
 
 ## Development workflow
 
-This repo is also a demonstration of **Spec-Driven Development (SDD)**
-with an AI coding agent working under explicit human architectural
-ownership: the agent drafts and implements, the architect designs,
-reviews, and is the only one who ever runs `terraform apply`.
+This project uses **AI Together Framework V3** with explicit human
+architectural ownership. The agent prepares and implements approved work;
+the architect owns decisions, reviews, and every cloud-changing command.
 
-<img src="docs/diagrams/sdd-terraform-workflow.png" width="600"
-alt="SDD + Terraform workflow: Architect and Coding agent swimlanes"/>
+[Open the editable multicloud workflow diagram](docs/diagrams/multicloud-ait-workflow.excalidraw).
 
-**Setup, once**: the agent drafts `specs/constitution.md` (mission, stack,
-conventions) and `specs/roadmap.md` (planned features); the architect
-reviews and approves before anything else happens.
+The active project context is maintained in the
+[constitution](.framework/constitution/): mission, technical stack,
+roadmap, and framework diagrams. It defines an AWS baseline first,
+followed by an approved design and implementation path for each additional
+provider.
 
-**Per feature**, the cycle repeats:
+For each substantial change, the workflow is:
 
-1. **Specify** — the agent drafts `spec.md`: what, why, scope, verifiable
-   acceptance criteria.
-2. **Plan** — the agent drafts `plan.md`: technical approach, files
-   touched, Architecture Decision Records (ADRs) for anything
-   non-obvious — IAM scoping choices are always ADRs.
-3. **Tasks** — the agent drafts `tasks.md`: atomic, one-commit-each tasks
-   with a Definition of Done.
-4. **Approval gate** — the architect reviews all three and either
-   approves or requests changes. No infrastructure code gets written
-   before this gate passes.
-5. **Implement** — the agent writes the Terraform and Python, one commit
-   per task.
-6. **Validate** — `terraform fmt -check` → `terraform validate` →
-   `terraform plan`, never `apply`.
-7. **Review gate** — the architect reviews the plan output against the
-   spec's acceptance criteria.
-8. **Replanning** — the agent updates `specs/roadmap.md` to mark the
-   feature done, then the cycle starts again for the next feature.
+1. **Frame the work** — establish scope, affected provider, constraints,
+   and the intended validation evidence.
+2. **Review and decide** — record decisions in the active Framework
+   artifacts and obtain the architect's approval where required.
+3. **Implement and validate** — make provider-scoped changes, then run
+   non-mutating checks such as `terraform fmt -check`, `terraform validate`,
+   and code compilation.
+4. **Close the loop** — capture durable decisions and update the roadmap
+   before moving to the next provider or phase.
 
-**Once every feature is code-complete** — outside the agent loop
-entirely — the architect runs `terraform apply` manually, verifies the
-live pipeline, and `terraform destroy`s it when done.
-
-This project's own `specs/` directory is the artifact trail of that
-process: every `spec.md`/`plan.md`/`tasks.md` under
-[`specs/features/`](specs/features/) is a real, unedited record of how
-each feature was actually designed and approved, not a retrofit.
-[`specs/retrospective.md`](specs/retrospective.md) captures what worked
-and what didn't about running SDD this way.
+Agents never run `terraform apply` or `terraform destroy`. The architect
+runs those commands manually when the approved design is ready and verifies
+or tears down the deployed pipeline as appropriate.
 
 ## License
 

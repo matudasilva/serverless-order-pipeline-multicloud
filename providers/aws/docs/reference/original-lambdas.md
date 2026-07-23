@@ -3,10 +3,11 @@
 > Record of the starting point as provided in the "Building a Proof of
 > Concept for a Serverless Solution" exercise (AWS Architecting Solutions),
 > AWS console, Python 3.9. This code is NOT deployed as-is: it's the
-> reference on top of which the `core-pipeline` feature builds the
-> improvements described in `specs/features/core-pipeline/plan.md` (error
-> handling, structured logging, configuration via environment variables,
-> boto3 clients outside the handler, least-privilege IAM).
+> reference on top of which the current AWS baseline implements
+> improvements documented in
+> [`../legacy-sdd-decisions.md`](../legacy-sdd-decisions.md): error handling,
+> structured logging, configuration via environment variables, boto3 clients
+> outside the handler, and least-privilege IAM.
 
 ## Lambda 1 — POC-Lambda-1 (SQS → DynamoDB)
 

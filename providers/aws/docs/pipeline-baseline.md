@@ -15,6 +15,6 @@ AWS is the functional reference implementation for the multicloud comparison. It
 
 ## Historical evidence
 
-Legacy SDD records a prior live end-to-end AWS verification and subsequent teardown. It is evidence
-of the baseline, not a claim that resources are currently deployed. The original material remains
-under `specs/` until Phase 5.
+The original AWS repository records a prior live end-to-end verification and subsequent teardown.
+It is evidence of the baseline, not a claim that resources are currently deployed. This repository
+retains only the synthesized baseline and decision documentation needed for active multicloud work.
