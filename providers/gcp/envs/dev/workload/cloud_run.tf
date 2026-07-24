@@ -12,6 +12,10 @@ resource "google_cloud_run_v2_service" "ingress" {
       image = var.ingress_image
       resources { limits = { cpu = "1", memory = "512Mi" } }
       env {
+        name  = "GOOGLE_CLOUD_PROJECT"
+        value = var.project_id
+      }
+      env {
         name  = "ORDERS_TOPIC"
         value = google_pubsub_topic.orders.name
       }
@@ -19,6 +23,12 @@ resource "google_cloud_run_v2_service" "ingress" {
   }
 
   depends_on = [data.google_artifact_registry_repository.runtime_images]
+
+  # Cloud Run returns a service-level automatic scaling block with zero values.
+  # Revision-level scaling above remains managed by this configuration.
+  lifecycle {
+    ignore_changes = [scaling]
+  }
 }
 
 resource "google_cloud_run_v2_service" "processor" {
@@ -34,10 +44,20 @@ resource "google_cloud_run_v2_service" "processor" {
     containers {
       image = var.processor_image
       resources { limits = { cpu = "1", memory = "512Mi" } }
+      env {
+        name  = "GOOGLE_CLOUD_PROJECT"
+        value = var.project_id
+      }
     }
   }
 
   depends_on = [data.google_artifact_registry_repository.runtime_images]
+
+  # Cloud Run returns a service-level automatic scaling block with zero values.
+  # Revision-level scaling above remains managed by this configuration.
+  lifecycle {
+    ignore_changes = [scaling]
+  }
 }
 
 resource "google_cloud_run_v2_service" "notifier" {
@@ -54,6 +74,10 @@ resource "google_cloud_run_v2_service" "notifier" {
       image = var.notifier_image
       resources { limits = { cpu = "1", memory = "512Mi" } }
       env {
+        name  = "GOOGLE_CLOUD_PROJECT"
+        value = var.project_id
+      }
+      env {
         name  = "NOTIFICATIONS_TOPIC"
         value = google_pubsub_topic.notifications.name
       }
@@ -61,6 +85,12 @@ resource "google_cloud_run_v2_service" "notifier" {
   }
 
   depends_on = [data.google_artifact_registry_repository.runtime_images]
+
+  # Cloud Run returns a service-level automatic scaling block with zero values.
+  # Revision-level scaling above remains managed by this configuration.
+  lifecycle {
+    ignore_changes = [scaling]
+  }
 }
 
 resource "google_cloud_run_v2_service_iam_member" "notifier_eventarc" {

@@ -47,6 +47,14 @@ resource "google_project_iam_member" "eventarc_receive" {
   member  = "serviceAccount:${google_service_account.eventarc_trigger.email}"
 }
 
+resource "google_project_iam_member" "firestore_eventarc_publish" {
+  project = var.project_id
+  role    = "roles/eventarc.publisher"
+  member  = "serviceAccount:${local.firestore_service_agent}"
+
+  depends_on = [google_project_service.required["eventarcpublishing.googleapis.com"]]
+}
+
 resource "google_service_account_iam_member" "pubsub_push_token_creator" {
   service_account_id = google_service_account.pubsub_push.name
   role               = "roles/iam.serviceAccountTokenCreator"

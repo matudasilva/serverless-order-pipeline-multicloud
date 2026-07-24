@@ -1,6 +1,7 @@
 resource "google_eventarc_trigger" "order_created" {
-  name     = "${local.name_prefix}-order-created"
-  location = var.region
+  name                    = "${local.name_prefix}-order-created"
+  location                = var.region
+  event_data_content_type = "application/protobuf"
 
   matching_criteria {
     attribute = "type"
@@ -12,6 +13,7 @@ resource "google_eventarc_trigger" "order_created" {
   }
   matching_criteria {
     attribute = "document"
+    operator  = "match-path-pattern"
     value     = "orders/{orderId}"
   }
 
