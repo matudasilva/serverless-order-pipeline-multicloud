@@ -29,3 +29,10 @@ billing, email, and image identifiers remain in ignored local configuration.
 Terraform `apply` and `destroy` remain manual architect operations. The
 development environment should be torn down when it is not being tested to
 avoid unnecessary charges.
+
+## Teardown verification
+
+After validation, the workload and bootstrap stacks were destroyed manually.
+Both Terraform states are empty, and verification confirmed that no Cloud Run
+services, Pub/Sub topics, Eventarc triggers, Firestore database, Artifact
+Registry repository, or pipeline service accounts remain in the project.
