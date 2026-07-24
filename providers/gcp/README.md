@@ -4,6 +4,9 @@ GCP is implemented and manually validated as the first deployed provider
 variant after the AWS baseline. Provider-specific decisions, Terraform stages,
 and validation evidence remain isolated here.
 
+<img src="docs/diagrams/architecture.svg" width="700"
+alt="Validated GCP order pipeline architecture"/>
+
 ## Layout
 
 | Path | Responsibility |

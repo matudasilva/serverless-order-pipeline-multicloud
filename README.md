@@ -36,6 +36,26 @@ The AWS baseline runs in `us-east-1` as a single development environment.
 Its scope and technical constraints are recorded in the active
 [AI Together Framework V3 constitution](.framework/constitution/).
 
+## GCP variant
+
+The validated GCP implementation preserves the same responsibilities with
+native services:
+
+```text
+Client --POST /--> Cloud Run ingress --publish--> Pub/Sub orders
+  --push--> Cloud Run processor --write--> Firestore orders
+  --Firestore created event--> Eventarc --> Cloud Run notifier
+  --publish--> Pub/Sub notifications
+```
+
+The processor subscription has a dead-letter topic and inspection
+subscription. Only ingress is public; processor and notifier are private.
+The deployment and end-to-end evidence are documented in
+[`providers/gcp/docs/validation.md`](providers/gcp/docs/validation.md).
+
+<img src="providers/gcp/docs/diagrams/architecture.svg" width="700"
+alt="Validated GCP order pipeline architecture"/>
+
 ## Shared functional contract
 
 The provider-neutral HTTP contract, processing responsibilities, and portable
