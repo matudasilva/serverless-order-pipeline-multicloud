@@ -51,4 +51,6 @@ resource "google_service_account_iam_member" "pubsub_push_token_creator" {
   service_account_id = google_service_account.pubsub_push.name
   role               = "roles/iam.serviceAccountTokenCreator"
   member             = "serviceAccount:${local.pubsub_service_agent}"
+
+  depends_on = [google_project_service.required["pubsub.googleapis.com"]]
 }

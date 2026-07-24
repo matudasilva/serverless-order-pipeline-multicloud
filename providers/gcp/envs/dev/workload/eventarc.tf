@@ -22,12 +22,7 @@ resource "google_eventarc_trigger" "order_created" {
     }
   }
 
-  service_account = google_service_account.eventarc_trigger.email
+  service_account = data.google_service_account.eventarc_trigger.email
 
-  depends_on = [
-    google_project_service.required["eventarc.googleapis.com"],
-    google_firestore_database.orders,
-    google_cloud_run_v2_service_iam_member.notifier_eventarc,
-    google_project_iam_member.eventarc_receive,
-  ]
+  depends_on = [google_cloud_run_v2_service_iam_member.notifier_eventarc]
 }

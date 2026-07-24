@@ -3,7 +3,7 @@ resource "google_cloud_run_v2_service" "ingress" {
   location = var.region
 
   template {
-    service_account = google_service_account.ingress.email
+    service_account = data.google_service_account.ingress.email
     scaling {
       min_instance_count = 0
       max_instance_count = 2
@@ -18,10 +18,7 @@ resource "google_cloud_run_v2_service" "ingress" {
     }
   }
 
-  depends_on = [
-    google_project_service.required["run.googleapis.com"],
-    google_artifact_registry_repository.runtime_images,
-  ]
+  depends_on = [data.google_artifact_registry_repository.runtime_images]
 }
 
 resource "google_cloud_run_v2_service" "processor" {
@@ -29,7 +26,7 @@ resource "google_cloud_run_v2_service" "processor" {
   location = var.region
 
   template {
-    service_account = google_service_account.processor.email
+    service_account = data.google_service_account.processor.email
     scaling {
       min_instance_count = 0
       max_instance_count = 1
@@ -40,10 +37,7 @@ resource "google_cloud_run_v2_service" "processor" {
     }
   }
 
-  depends_on = [
-    google_project_service.required["run.googleapis.com"],
-    google_artifact_registry_repository.runtime_images,
-  ]
+  depends_on = [data.google_artifact_registry_repository.runtime_images]
 }
 
 resource "google_cloud_run_v2_service" "notifier" {
@@ -51,7 +45,7 @@ resource "google_cloud_run_v2_service" "notifier" {
   location = var.region
 
   template {
-    service_account = google_service_account.notifier.email
+    service_account = data.google_service_account.notifier.email
     scaling {
       min_instance_count = 0
       max_instance_count = 1
@@ -66,17 +60,14 @@ resource "google_cloud_run_v2_service" "notifier" {
     }
   }
 
-  depends_on = [
-    google_project_service.required["run.googleapis.com"],
-    google_artifact_registry_repository.runtime_images,
-  ]
+  depends_on = [data.google_artifact_registry_repository.runtime_images]
 }
 
 resource "google_cloud_run_v2_service_iam_member" "notifier_eventarc" {
   name     = google_cloud_run_v2_service.notifier.name
   location = var.region
   role     = "roles/run.invoker"
-  member   = "serviceAccount:${google_service_account.eventarc_trigger.email}"
+  member   = "serviceAccount:${data.google_service_account.eventarc_trigger.email}"
 }
 
 resource "google_cloud_run_v2_service_iam_member" "ingress_public" {
@@ -90,5 +81,5 @@ resource "google_cloud_run_v2_service_iam_member" "processor_push" {
   name     = google_cloud_run_v2_service.processor.name
   location = var.region
   role     = "roles/run.invoker"
-  member   = "serviceAccount:${google_service_account.pubsub_push.email}"
+  member   = "serviceAccount:${data.google_service_account.pubsub_push.email}"
 }

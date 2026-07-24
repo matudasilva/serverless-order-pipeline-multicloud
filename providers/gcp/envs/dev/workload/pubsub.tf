@@ -1,20 +1,16 @@
 resource "google_pubsub_topic" "orders" {
   name = "${local.name_prefix}-orders"
   message_storage_policy { allowed_persistence_regions = [var.region] }
-
-  depends_on = [google_project_service.required["pubsub.googleapis.com"]]
 }
+
 resource "google_pubsub_topic" "orders_dlq" {
   name = "${local.name_prefix}-orders-dlq"
   message_storage_policy { allowed_persistence_regions = [var.region] }
-
-  depends_on = [google_project_service.required["pubsub.googleapis.com"]]
 }
+
 resource "google_pubsub_topic" "notifications" {
   name = "${local.name_prefix}-notifications"
   message_storage_policy { allowed_persistence_regions = [var.region] }
-
-  depends_on = [google_project_service.required["pubsub.googleapis.com"]]
 }
 
 resource "google_pubsub_topic_iam_member" "dlq_pubsub_publish" {
@@ -43,7 +39,7 @@ resource "google_pubsub_subscription" "orders_processing" {
 
   push_config {
     push_endpoint = google_cloud_run_v2_service.processor.uri
-    oidc_token { service_account_email = google_service_account.pubsub_push.email }
+    oidc_token { service_account_email = data.google_service_account.pubsub_push.email }
   }
   dead_letter_policy {
     dead_letter_topic     = google_pubsub_topic.orders_dlq.id
@@ -53,11 +49,6 @@ resource "google_pubsub_subscription" "orders_processing" {
     minimum_backoff = "10s"
     maximum_backoff = "600s"
   }
-
-  depends_on = [
-    google_service_account_iam_member.pubsub_push_token_creator,
-    google_pubsub_topic_iam_member.dlq_pubsub_publish,
-  ]
 }
 
 resource "google_pubsub_subscription_iam_member" "processing_dlq_ack" {

@@ -18,6 +18,12 @@ The implementation must satisfy
 [`../../docs/contracts/order-pipeline-v1.md`](../../docs/contracts/order-pipeline-v1.md)
 and ORQ-002 before any cloud resource is created.
 
+The development Terraform configuration is split into
+[`envs/dev/bootstrap/`](envs/dev/bootstrap/) and
+[`envs/dev/workload/`](envs/dev/workload/). See the
+[deployment-stage guide](envs/dev/README.md) for the required order and
+approval boundary.
+
 ## Container images
 
 Each service has a self-contained Dockerfile. Build from `providers/gcp/src/`
