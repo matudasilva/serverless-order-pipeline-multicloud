@@ -7,9 +7,8 @@ architectural responsibilities while using their native services.
 
 ## Architecture
 
-<img src="providers/aws/docs/diagrams/architecture.png" width="500"
-alt="Solution architecture: Client to API Gateway to SQS to Lambda 1
-to DynamoDB to Lambda 2 to SNS to Email"/>
+<img src="providers/aws/docs/diagrams/architecture.svg" width="700"
+alt="Validated AWS order pipeline architecture"/>
 
 The deployed and validated GCP variant is documented in
 [its architecture diagram](providers/gcp/docs/diagrams/architecture.svg) and
@@ -102,7 +101,7 @@ The preserved AWS decisions and baseline behavior are documented in
 ```
 providers/aws/envs/dev/ # Terraform stack for the AWS dev environment
 providers/aws/src/lambdas/ # Python code (lambda_1: SQS -> DynamoDB, lambda_2: Streams -> SNS)
-providers/aws/docs/diagrams/ # AWS architecture diagram (Excalidraw source + PNG export)
+providers/aws/docs/diagrams/ # AWS architecture diagram (SVG + Excalidraw source + PNG export)
 providers/aws/docs/reference/ # AWS reference material (original exercise baseline)
 .framework/constitution/ # Active mission, technical constraints, roadmap, and framework diagrams
 modules/             # Reusable Terraform modules (only where justified — none needed yet)
