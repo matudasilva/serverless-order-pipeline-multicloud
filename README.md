@@ -11,8 +11,9 @@ architectural responsibilities while using their native services.
 alt="Solution architecture: Client to API Gateway to SQS to Lambda 1
 to DynamoDB to Lambda 2 to SNS to Email"/>
 
-The approved, not-yet-deployed GCP design is available as
-[an architecture diagram](providers/gcp/docs/diagrams/architecture.svg).
+The deployed and validated GCP variant is documented in
+[its architecture diagram](providers/gcp/docs/diagrams/architecture.svg) and
+[validation record](providers/gcp/docs/validation.md).
 
 ```
 Client --POST /orders--> API Gateway --SendMessage--> SQS (POC-Queue)
@@ -142,7 +143,10 @@ The active project context is maintained in the
 [constitution](.framework/constitution/): mission, technical stack,
 roadmap, and framework diagrams. It defines an AWS baseline first,
 followed by an approved design and implementation path for each additional
-provider.
+provider. The GCP design and implementation are complete; Azure remains the
+next provider-specific design and implementation path. GCP is deployed
+manually in a development project; identifiers,
+credentials, and billing contacts remain local-only.
 
 For each substantial change, the workflow is:
 

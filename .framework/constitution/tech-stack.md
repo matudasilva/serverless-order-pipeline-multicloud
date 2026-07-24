@@ -10,7 +10,7 @@
 - AWS baseline: `hashicorp/aws ~> 5.0` and `hashicorp/archive ~> 2.0` providers in `us-east-1`.
 - Python 3.12 for the AWS Lambdas, packaged with `archive_file` from `providers/aws/src/lambdas/`.
 - AWS baseline services: API Gateway, SQS with DLQ, Lambda, DynamoDB with Streams, SNS, CloudWatch Logs, and least-privilege IAM.
-- GCP variant (approved design; not deployed): `hashicorp/google ~> 6.0` in `us-central1`, Python 3.12 Cloud Run services, Pub/Sub with a push subscription and DLQ, Firestore Native, Eventarc Standard, Artifact Registry, Cloud Logging, Cloud Monitoring, and least-privilege IAM.
+- GCP variant (implemented and manually validated): `hashicorp/google ~> 6.0` in `us-central1`, Python 3.12 Cloud Run services, Pub/Sub with a push subscription and DLQ, Firestore Native, Eventarc Standard, Eventarc Publishing, Artifact Registry, Cloud Logging, Cloud Monitoring, and least-privilege IAM.
 - Git and GitHub; GitHub Actions runs Terraform formatting and validation without a backend or credentials.
 - AI Together Framework V3 with English narrative artifacts, a `hybrid` policy, Notion operational memory, and a limit of two active ORQs.
 

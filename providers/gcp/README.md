@@ -1,9 +1,10 @@
-# GCP Provider Design
+# GCP Provider
 
-GCP is not implemented or deployed yet. Its approved design is isolated here
-to preserve the AWS baseline and to make provider-specific decisions explicit.
+GCP is implemented and manually validated as the first deployed provider
+variant after the AWS baseline. Provider-specific decisions, Terraform stages,
+and validation evidence remain isolated here.
 
-## Proposed layout
+## Layout
 
 | Path | Responsibility |
 |---|---|
@@ -14,9 +15,10 @@ to preserve the AWS baseline and to make provider-specific decisions explicit.
 | `docs/diagrams/` | Provider architecture design and its README asset. |
 | `docs/` | Provider decisions, test evidence, cost controls, and teardown record. |
 
-The implementation must satisfy
+The implementation satisfies
 [`../../docs/contracts/order-pipeline-v1.md`](../../docs/contracts/order-pipeline-v1.md)
-and ORQ-002 before any cloud resource is created.
+and the approved ORQ-002 design. See the
+[validation record](docs/validation.md) for manual deployment evidence.
 
 The development Terraform configuration is split into
 [`envs/dev/bootstrap/`](envs/dev/bootstrap/) and
@@ -35,6 +37,6 @@ docker build -f processor/Dockerfile -t processor:dev .
 docker build -f notifier/Dockerfile -t notifier:dev .
 ```
 
-The Terraform development variables refer to the corresponding future images
-in the private Artifact Registry repository. Building, pushing, and applying
-remain separate, explicitly approved cloud operations.
+The Terraform development variables refer to images in the private Artifact
+Registry repository. Building, pushing, and applying remain separate,
+explicitly approved cloud operations.
