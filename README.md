@@ -11,6 +11,9 @@ architectural responsibilities while using their native services.
 alt="Solution architecture: Client to API Gateway to SQS to Lambda 1
 to DynamoDB to Lambda 2 to SNS to Email"/>
 
+The approved, not-yet-deployed GCP design is available as
+[an architecture diagram](providers/gcp/docs/diagrams/architecture.svg).
+
 ```
 Client --POST /orders--> API Gateway --SendMessage--> SQS (POC-Queue)
   --SQS trigger--> Lambda 1 --PutItem--> DynamoDB (orders)
