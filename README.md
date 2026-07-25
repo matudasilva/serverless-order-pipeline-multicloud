@@ -7,9 +7,12 @@ architectural responsibilities while using their native services.
 
 ## Architecture
 
-<img src="providers/aws/docs/diagrams/architecture.png" width="500"
-alt="Solution architecture: Client to API Gateway to SQS to Lambda 1
-to DynamoDB to Lambda 2 to SNS to Email"/>
+<img src="providers/aws/docs/diagrams/architecture.svg" width="700"
+alt="Validated AWS order pipeline architecture"/>
+
+The deployed and validated GCP variant is documented in
+[its architecture diagram](providers/gcp/docs/diagrams/architecture.svg) and
+[validation record](providers/gcp/docs/validation.md).
 
 The approved Azure design is shown below. It is an ephemeral Azure Free-trial
 implementation that was deployed and validated with a sanitized smoke test.
@@ -43,6 +46,26 @@ Client --POST /orders--> API Gateway --SendMessage--> SQS (POC-Queue)
 The AWS baseline runs in `us-east-1` as a single development environment.
 Its scope and technical constraints are recorded in the active
 [AI Together Framework V3 constitution](.framework/constitution/).
+
+## GCP variant
+
+The validated GCP implementation preserves the same responsibilities with
+native services:
+
+```text
+Client --POST /--> Cloud Run ingress --publish--> Pub/Sub orders
+  --push--> Cloud Run processor --write--> Firestore orders
+  --Firestore created event--> Eventarc --> Cloud Run notifier
+  --publish--> Pub/Sub notifications
+```
+
+The processor subscription has a dead-letter topic and inspection
+subscription. Only ingress is public; processor and notifier are private.
+The deployment and end-to-end evidence are documented in
+[`providers/gcp/docs/validation.md`](providers/gcp/docs/validation.md).
+
+<img src="providers/gcp/docs/diagrams/architecture.svg" width="700"
+alt="Validated GCP order pipeline architecture"/>
 
 ## Shared functional contract
 
@@ -90,7 +113,7 @@ The preserved AWS decisions and baseline behavior are documented in
 ```
 providers/aws/envs/dev/ # Terraform stack for the AWS dev environment
 providers/aws/src/lambdas/ # Python code (lambda_1: SQS -> DynamoDB, lambda_2: Streams -> SNS)
-providers/aws/docs/diagrams/ # AWS architecture diagram (Excalidraw source + PNG export)
+providers/aws/docs/diagrams/ # AWS architecture diagram (SVG + Excalidraw source + PNG export)
 providers/aws/docs/reference/ # AWS reference material (original exercise baseline)
 .framework/constitution/ # Active mission, technical constraints, roadmap, and framework diagrams
 modules/             # Reusable Terraform modules (only where justified — none needed yet)
@@ -151,7 +174,10 @@ The active project context is maintained in the
 [constitution](.framework/constitution/): mission, technical stack,
 roadmap, and framework diagrams. It defines an AWS baseline first,
 followed by an approved design and implementation path for each additional
-provider.
+provider. The GCP design and implementation are complete; Azure remains the
+next provider-specific design and implementation path. GCP is deployed
+manually in a development project; identifiers,
+credentials, and billing contacts remain local-only.
 
 For each substantial change, the workflow is:
 

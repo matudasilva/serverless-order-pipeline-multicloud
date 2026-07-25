@@ -19,16 +19,16 @@ The AWS baseline was imported into an independent repository and reorganized und
 | 4 | Migrate requirements, decisions, ADRs, and learnings from the inherited SDD process | Complete |
 | 5 | Retire standalone SDD governance after verified migration | Complete |
 | 6 | Define the shared functional order contract and test payloads | Complete |
-| 7 | Design the GCP variant through an approved design ORQ | Pending |
-| 8 | Implement, validate, and manually test the GCP variant | Pending |
+| 7 | Design the GCP variant through an approved design ORQ | Complete |
+| 8 | Implement, validate, and manually test the GCP variant | Complete |
 | 9 | Create the Azure Free account after GCP is closed and learnings are recorded | Pending |
 | 10 | Design and implement the Azure variant | Pending |
 | 11 | Compare services, retries, DLQ behavior, IAM, observability, costs, and portability | Pending |
 
 ## Next Work
 
-Design the GCP variant through an approved design ORQ. The shared functional
-contract and portable test payloads are recorded in
+Create the Azure Free account after recording the GCP implementation learnings.
+The shared functional contract and portable test payloads are recorded in
 [`docs/contracts/order-pipeline-v1.md`](../../docs/contracts/order-pipeline-v1.md).
 The AWS baseline remains the functional reference; provider equivalence is
 based on responsibility rather than service-name matching.
@@ -36,5 +36,5 @@ based on responsibility rather than service-name matching.
 ## Dependencies and Risks
 
 - Standalone SDD governance has been retired from this repository. The original AWS repository retains its historical records; active decisions live in the Framework constitution and provider documentation.
-- The GCP variant requires a design review covering HTTP ingress, Pub/Sub and DLQ, runtime, Firestore/Eventarc, IAM, notifications, regions, costs, and teardown.
+- GCP design and manual validation are complete. The validation record covers HTTP ingress, Pub/Sub and DLQ, runtime, Firestore/Eventarc, IAM, notifications, regions, costs, and teardown boundaries.
 - The Azure variant depends on the learnings recorded after GCP and must not be brought forward to avoid premature cost and complexity.

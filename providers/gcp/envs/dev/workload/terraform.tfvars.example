@@ -1,0 +1,8 @@
+project_id     = "replace-with-project-id"
+project_number = "replace-with-project-number"
+region         = "us-central1"
+
+# Replace after the private Artifact Registry repository contains the images.
+ingress_image   = "us-central1-docker.pkg.dev/replace-with-project-id/order-pipeline/ingress:dev"
+processor_image = "us-central1-docker.pkg.dev/replace-with-project-id/order-pipeline/processor:dev"
+notifier_image  = "us-central1-docker.pkg.dev/replace-with-project-id/order-pipeline/notifier:dev"

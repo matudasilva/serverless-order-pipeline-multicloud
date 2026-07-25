@@ -28,6 +28,7 @@ versioned_contract:
   - .framework/constitution/diagrams/INDEX.md
   - .framework/constitution/diagrams/context.svg
   - .framework/constitution/diagrams/architecture.svg
+  - .framework/constitution/diagrams/structural.svg
   - .framework/templates/learnings.md
   - .framework/project-config.yml
   - .framework/framework-version
