@@ -11,6 +11,18 @@ architectural responsibilities while using their native services.
 alt="Solution architecture: Client to API Gateway to SQS to Lambda 1
 to DynamoDB to Lambda 2 to SNS to Email"/>
 
+The approved Azure design is shown below. It is an ephemeral Azure Free-trial
+implementation that was deployed and validated with a sanitized smoke test.
+
+<img src="providers/azure/docs/diagrams/architecture.png" width="700"
+alt="Azure order pipeline design: public HTTP Function to Azure Service Bus,
+private processor, Cosmos DB Change Feed, private notifier, notification queue,
+and deduplicated notification sink"/>
+
+The Azure infrastructure incident diagnosis, permanent Terraform safeguards,
+and sanitized validation outcome are recorded in
+[`providers/azure/docs/infrastructure-incident-resolution.md`](providers/azure/docs/infrastructure-incident-resolution.md).
+
 ```
 Client --POST /orders--> API Gateway --SendMessage--> SQS (POC-Queue)
   --SQS trigger--> Lambda 1 --PutItem--> DynamoDB (orders)
@@ -53,7 +65,7 @@ The preserved AWS decisions and baseline behavior are documented in
   ([decision record](providers/aws/docs/legacy-sdd-decisions.md)).
 - **Decoupling with a safety net.** SQS sits between the API and the
   processing Lambda, and `POC-Queue` has a dead-letter queue so a
-  poison-pill message gets set aside after 5 failed attempts instead of
+  poison-pill message gets dead-lettered after 5 failed attempts instead of
   retrying forever — a deliberate improvement over the original exercise
   ([decision record](providers/aws/docs/legacy-sdd-decisions.md)).
   Batch failures are reported per-message
