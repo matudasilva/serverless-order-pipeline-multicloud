@@ -7,11 +7,11 @@ architectural responsibilities while using their native services.
 
 ## Architecture
 
-<img src="providers/aws/docs/diagrams/architecture.svg" width="700"
+<img src="providers/aws/docs/diagrams/architecture.png" width="700"
 alt="Validated AWS order pipeline architecture"/>
 
 The deployed and validated GCP variant is documented in
-[its architecture diagram](providers/gcp/docs/diagrams/architecture.svg) and
+[its architecture diagram](providers/gcp/docs/diagrams/architecture.png) and
 [validation record](providers/gcp/docs/validation.md).
 
 The approved Azure design is shown below. It is an ephemeral Azure Free-trial
@@ -64,7 +64,7 @@ subscription. Only ingress is public; processor and notifier are private.
 The deployment and end-to-end evidence are documented in
 [`providers/gcp/docs/validation.md`](providers/gcp/docs/validation.md).
 
-<img src="providers/gcp/docs/diagrams/architecture.svg" width="700"
+<img src="providers/gcp/docs/diagrams/architecture.png" width="700"
 alt="Validated GCP order pipeline architecture"/>
 
 ## Shared functional contract
