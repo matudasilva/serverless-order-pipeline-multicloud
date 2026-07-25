@@ -150,7 +150,26 @@ notification records. Wait for role propagation before testing.
 **Permanent safeguard:** The native role definitions and assignments are
 Terraform-managed, container-scoped, and do not use account keys.
 
-### 8. Fix the processor's transactional-batch SDK call
+### 8. Link observability without committing a runtime secret
+
+**Symptom:** Application Insights and Log Analytics resources existed, but the
+Function Apps did not explicitly reference Application Insights.
+
+**Diagnosis:** Creating an Application Insights resource alone does not
+guarantee Function telemetry ingestion. The required runtime setting must be
+managed without placing its connection-string value in source control.
+
+**Resolution:** Configure the Function App setting from Terraform's sensitive
+Application Insights resource output. The value is never written as a literal
+in source and Terraform state remains untracked. Preserve the separate Flex
+deployment-storage setting that Core Tools may manage during publication.
+
+**Permanent safeguard:** Terraform links telemetry explicitly while ignoring
+only the provider/platform-managed storage settings that should not be
+source-controlled. The Azure CI job validates this configuration on every
+relevant pull request.
+
+### 9. Fix the processor's transactional-batch SDK call
 
 **Symptom:** The processor returned Cosmos `400` when persisting the order and
 outbox record.
@@ -166,7 +185,7 @@ than turning it into a queue-processing failure.
 **Permanent safeguard:** The code fix is retained and the troubleshooting
 runbook records the exact safe operation form.
 
-### 9. Avoid unsupported legacy Flex settings
+### 10. Avoid unsupported legacy Flex settings
 
 **Symptom:** A legacy worker-runtime application setting conflicted with the
 Flex Consumption configuration model.
@@ -181,7 +200,7 @@ the legacy `FUNCTIONS_WORKER_RUNTIME` application setting.
 Consumption resource; Core Tools remote build remains the deployment build
 authority.
 
-### 10. Validate with a controlled, non-destructive smoke test
+### 11. Validate with a controlled, non-destructive smoke test
 
 **Symptom:** A resource-creation success did not by itself demonstrate that
 the contract and asynchronous path were working.

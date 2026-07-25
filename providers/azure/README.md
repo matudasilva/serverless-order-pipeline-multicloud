@@ -31,6 +31,11 @@ state, credentials, connection strings, subscription IDs, or tenant IDs.
 `terraform apply`, `terraform destroy`, account setup, and API registration are
 manual architect actions and are not run by this repository workflow.
 
+Each Function App is linked to the Terraform-managed Application Insights
+resource using a Terraform reference, never a literal connection string in
+source. Azure Functions requires that setting for monitoring; the resulting
+value is sensitive runtime configuration and remains outside version control.
+
 Terraform packages each Function source directory into a reproducible ZIP under
 the local Terraform working directory. The package includes the pinned
 `requirements.txt` and the shared `common` module. Dependency installation is
@@ -40,6 +45,10 @@ environment, so publishing remains a separate, explicitly approved deployment
 gate. Use [`scripts/publish-functions.sh`](scripts/publish-functions.sh) with
 Azure Functions Core Tools and remote build after a successful infrastructure
 apply. No package is uploaded during local validation.
+
+Core Tools may manage the deployment-storage setting required by Flex
+publication. Terraform deliberately preserves that platform-managed setting
+instead of treating it as a source-controlled secret.
 
 For the complete deployment sequence, recovery procedures, and known Azure
 platform constraints, read

@@ -251,6 +251,7 @@ resource "azurerm_function_app_flex_consumption" "this" {
     COSMOS_DATABASE_NAME                           = azurerm_cosmosdb_sql_database.this.name
     COSMOS_CONNECTION__accountEndpoint             = azurerm_cosmosdb_account.this.endpoint
     COSMOS_CONNECTION__credential                  = "managedidentity"
+    APPLICATIONINSIGHTS_CONNECTION_STRING          = azurerm_application_insights.this.connection_string
     APPINSIGHTS_SAMPLING_PERCENTAGE                = "25"
   }
   site_config {}
@@ -259,7 +260,13 @@ resource "azurerm_function_app_flex_consumption" "this" {
   }
 
   lifecycle {
-    ignore_changes = [app_settings["AzureWebJobsStorage"]]
+    # AzureRM injects the legacy host-storage value with an empty key, while
+    # Core Tools owns the deployment-storage value used by Flex publication.
+    # Neither value is a repository-managed application setting.
+    ignore_changes = [
+      app_settings["AzureWebJobsStorage"],
+      app_settings["DEPLOYMENT_STORAGE_CONNECTION_STRING"],
+    ]
   }
 
   depends_on = [

@@ -99,9 +99,15 @@ required.
   because `common` was missing from its package.
 - Function host storage uses managed-identity settings
   (`AzureWebJobsStorage__accountName` and
-  `AzureWebJobsStorage__credential=managedidentity`). Terraform ignores only
-  the provider-injected legacy `AzureWebJobsStorage` setting, which otherwise
-  can contain an empty key and override the identity-based settings.
+  `AzureWebJobsStorage__credential=managedidentity`). Terraform ignores the
+  provider-injected legacy `AzureWebJobsStorage` setting, which otherwise can
+  contain an empty key and override the identity-based settings.
+- Application Insights is linked through a Terraform resource reference, never
+  a literal source value. The connection string is sensitive runtime
+  configuration and is not committed.
+- Core Tools may create the Flex deployment-storage setting during remote
+  publication. Terraform ignores that platform-managed setting so a later
+  infrastructure apply does not remove it or disclose its value.
 - Service Bus roles are scoped to individual queues. The processor receives
   only from `orders`; ingress sends only to `orders`; notifier receives from
   and sends only to its notification queues.
