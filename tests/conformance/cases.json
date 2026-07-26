@@ -1,0 +1,9 @@
+[
+  {"name": "valid-minimal", "body": {"item": "widget", "quantity": 1}, "expected": "accepted"},
+  {"name": "valid-typical", "body": {"item": "notebook", "quantity": 3}, "expected": "accepted"},
+  {"name": "invalid-missing-item", "body": {"quantity": 1}, "expected": "invalid"},
+  {"name": "invalid-blank-item", "body": {"item": "   ", "quantity": 1}, "expected": "invalid"},
+  {"name": "invalid-quantity-zero", "body": {"item": "widget", "quantity": 0}, "expected": "invalid"},
+  {"name": "invalid-quantity-type", "body": {"item": "widget", "quantity": "3"}, "expected": "invalid"},
+  {"name": "invalid-json", "raw": "{ \"item\": ", "expected": "invalid"}
+]

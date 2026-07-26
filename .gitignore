@@ -17,6 +17,7 @@ terraform.rc
 **/*.local.tf
 .build/
 *.zip
+tests/conformance/evidence/
 
 # Python
 __pycache__/
