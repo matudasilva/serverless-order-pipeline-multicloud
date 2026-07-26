@@ -1,0 +1,13 @@
+{
+  "checkpoint_type": "local-plan-v1",
+  "orq": "ORQ-003-azure-variant-design",
+  "artifact_policy": "hybrid",
+  "snapshot_format": "spec-contract-v1",
+  "spec_contract_sha256": "sha256:1116bd81b66d7fa63aca6ee91a8576222f23e6e0e9b8ffe548f66c701f7ef04d",
+  "review_verdict": "approved",
+  "reviewer": "Retrospective recovery; no contemporaneous independent review record",
+  "reduced_independence": true,
+  "review_ledger_id": null,
+  "operator_approval": "Matías: approved retrospective recovery of ORQ-003 (2026-07-26)",
+  "approved_at": "2026-07-26T22:30:15Z"
+}

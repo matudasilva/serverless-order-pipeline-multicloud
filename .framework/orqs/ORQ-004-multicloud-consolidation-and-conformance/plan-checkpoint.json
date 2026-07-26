@@ -1,0 +1,13 @@
+{
+  "checkpoint_type": "local-plan-v1",
+  "orq": "ORQ-004-multicloud-consolidation-and-conformance",
+  "artifact_policy": "hybrid",
+  "snapshot_format": "spec-contract-v1",
+  "spec_contract_sha256": "sha256:63d2a50240bc65e673cafd85b50a8ef6fe83a3632955f6a57ed8eadc8d10de3e",
+  "review_verdict": "approved",
+  "reviewer": "Architect Matías (explicit plan approval)",
+  "reduced_independence": true,
+  "review_ledger_id": null,
+  "operator_approval": "Matías: approved ORQ-004 plan (2026-07-26)",
+  "approved_at": "2026-07-26T22:13:56Z"
+}
