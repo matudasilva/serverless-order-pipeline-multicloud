@@ -21,20 +21,21 @@ The AWS baseline was imported into an independent repository and reorganized und
 | 6 | Define the shared functional order contract and test payloads | Complete |
 | 7 | Design the GCP variant through an approved design ORQ | Complete |
 | 8 | Implement, validate, and manually test the GCP variant | Complete |
-| 9 | Create the Azure Free account after GCP is closed and learnings are recorded | Pending |
-| 10 | Design and implement the Azure variant | Pending |
-| 11 | Compare services, retries, DLQ behavior, IAM, observability, costs, and portability | Pending |
+| 9 | Create the Azure Free account after GCP is closed and learnings are recorded | Complete |
+| 10 | Design, implement, and validate the Azure variant | Complete |
+| 11 | Compare services, retries, DLQ behavior, IAM, observability, costs, and portability | In progress |
 
 ## Next Work
 
-Create the Azure Free account after recording the GCP implementation learnings.
-The shared functional contract and portable test payloads are recorded in
+The next work is cross-provider consistency, conformance automation, and an
+evidence-based comparison. The shared functional contract and portable test
+payloads are recorded in
 [`docs/contracts/order-pipeline-v1.md`](../../docs/contracts/order-pipeline-v1.md).
-The AWS baseline remains the functional reference; provider equivalence is
-based on responsibility rather than service-name matching.
+AWS remains a historical functional baseline and is not v1-conformant; provider
+equivalence is based on responsibility rather than service-name matching.
 
 ## Dependencies and Risks
 
 - Standalone SDD governance has been retired from this repository. The original AWS repository retains its historical records; active decisions live in the Framework constitution and provider documentation.
-- GCP design and manual validation are complete. The validation record covers HTTP ingress, Pub/Sub and DLQ, runtime, Firestore/Eventarc, IAM, notifications, regions, costs, and teardown boundaries.
-- The Azure variant depends on the learnings recorded after GCP and must not be brought forward to avoid premature cost and complexity.
+- GCP was deployed, manually validated, and then torn down; its record covers HTTP ingress, Pub/Sub and DLQ, runtime, Firestore/Eventarc, IAM, notifications, regions, costs, and teardown boundaries.
+- Azure was implemented and deployed ephemerally. Its sanitized smoke evidence covers HTTP responses and queue drainage, not complete end-to-end conformance.

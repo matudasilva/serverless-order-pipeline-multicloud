@@ -11,7 +11,7 @@ credential identifiers.
 |---|---|---|
 | Flex Consumption region | PENDING | `centralus` is the next candidate after the East US/East US 2 deployment issues; it must be rechecked before apply. |
 | Python runtime in `centralus` | PENDING | Runtime listing must be rechecked for the final region before apply. |
-| Selected Terraform runtime | PASS | The implementation selects Python 3.12, which was listed for the target region. |
+| Selected Terraform runtime | PASS | The implementation selects Python 3.11, which was listed for the target region. |
 | Trial credit and duration | PASS (operator confirmation) | The operator confirmed that the subscription shows USD 200 and 30 days. The exact expiration date remains to be recorded. |
 | Existing Cosmos DB accounts | PASS (read-only) | No Cosmos DB accounts were returned in the current subscription; no existing account was observed consuming the Free Tier allowance. |
 | Required resource providers | PASS (operator-authorized) | `Microsoft.DocumentDB`, `Microsoft.Web`, and `Microsoft.Storage` were registered and verified. This changed subscription provider metadata only; no Azure resources were created. |

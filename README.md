@@ -1,9 +1,12 @@
 # serverless-order-pipeline-multicloud
 
-Starting from a classic AWS Architecting Solutions exercise, this repo
+This project explores how quickly a validated AWS architecture can be
+reproduced across GCP and Azure using Terraform and governed AI-assisted
+engineering—preserving functional responsibilities while adapting to each
+provider's native services and operational constraints.
+
+Starting from a classic AWS Architecting Solutions exercise, this repository
 evolves a working AWS pipeline into an auditable multicloud comparison.
-AWS is the functional baseline; GCP and Azure will preserve the same
-architectural responsibilities while using their native services.
 
 ## Architecture
 
@@ -14,8 +17,9 @@ The deployed and validated GCP variant is documented in
 [its architecture diagram](providers/gcp/docs/diagrams/architecture.png) and
 [validation record](providers/gcp/docs/validation.md).
 
-The approved Azure design is shown below. It is an ephemeral Azure Free-trial
-implementation that was deployed and validated with a sanitized smoke test.
+The implemented Azure variant is shown below. It was deployed ephemerally and
+validated with a sanitized HTTP and queue-drain smoke test; that evidence does
+not establish complete end-to-end v1 conformance.
 
 <img src="providers/azure/docs/diagrams/architecture.png" width="700"
 alt="Azure order pipeline design: public HTTP Function to Azure Service Bus,
@@ -25,6 +29,18 @@ and deduplicated notification sink"/>
 The Azure infrastructure incident diagnosis, permanent Terraform safeguards,
 and sanitized validation outcome are recorded in
 [`providers/azure/docs/infrastructure-incident-resolution.md`](providers/azure/docs/infrastructure-incident-resolution.md).
+
+## Provider status
+
+This table records repository evidence, not a claim about currently running
+cloud resources. “Contract v1” requires evidence for every portable HTTP case
+and the required persistence, notification, and retry/DLQ responsibilities.
+
+| Provider | Design | Terraform | Unit tests | Deployed | Sanitized validation | Contract v1 |
+|---|---|---|---|---|---|---|
+| AWS | Baseline documented | One dev root | None versioned | Historical deployment and teardown evidence; no current deployment claim | Historical baseline evidence | Not conformant: raw body, `orderID`, and `200` response |
+| GCP | Implemented | Bootstrap and workload roots | None versioned | Manually deployed and later teardown verified | Provider validation record | Target implementation; complete conformance evidence pending |
+| Azure | Implemented | One dev root | Contract and idempotency tests | Ephemeral deployment evidence; current state unspecified | Sanitized HTTP and queue-drain smoke evidence | Partial HTTP evidence; complete conformance not proven |
 
 ```
 Client --POST /orders--> API Gateway --SendMessage--> SQS (POC-Queue)
@@ -36,8 +52,8 @@ Client --POST /orders--> API Gateway --SendMessage--> SQS (POC-Queue)
   writes straight to SQS — no Lambda sits in the request path just to
   forward a message.
 - **SQS → Lambda 1 → DynamoDB**: the queue decouples ingestion from
-  processing and absorbs bursts; Lambda 1 persists each order with a
-  generated `orderID`.
+processing and absorbs bursts; Lambda 1 persists each order with a
+generated historical `orderID` field (not the target-contract `orderId`).
 - **DynamoDB Streams → Lambda 2 → SNS → Email**: every insert into
   `orders` triggers Lambda 2 asynchronously via DynamoDB Streams, which
   publishes a notification to SNS's single email subscription — no
@@ -72,8 +88,13 @@ alt="Validated GCP order pipeline architecture"/>
 The provider-neutral HTTP contract, processing responsibilities, and portable
 test payloads are defined in
 [`docs/contracts/order-pipeline-v1.md`](docs/contracts/order-pipeline-v1.md).
-It is the target for future provider implementations; the AWS baseline's
-current response and validation behavior are documented separately.
+It is the target contract for provider variants; the AWS baseline's current
+response and validation behavior are documented separately.
+
+The current local-state decision and future backend boundary are recorded in
+[`docs/decisions/0001-terraform-state-strategy.md`](docs/decisions/0001-terraform-state-strategy.md).
+The evidence-based responsibility, security, delivery, operability, and cost
+comparison is in [`docs/comparison/`](docs/comparison/).
 
 ## Key architecture decisions
 
@@ -108,18 +129,35 @@ The preserved AWS decisions and baseline behavior are documented in
   otherwise surface as a misleading `200`
   ([decision record](providers/aws/docs/legacy-sdd-decisions.md)).
 
-## Repo structure
+## Repository structure
+
+The original exercise organized stacks by global, region, environment, and
+application boundaries. That layout is appropriate for one AWS estate. This
+repository instead compares native implementations by provider, so each
+provider owns its state boundary, Terraform roots, source, tests, and operating
+documentation. Contracts and comparison material that are genuinely shared
+remain outside `providers/`.
 
 ```
-providers/aws/envs/dev/ # Terraform stack for the AWS dev environment
-providers/aws/src/lambdas/ # Python code (lambda_1: SQS -> DynamoDB, lambda_2: Streams -> SNS)
-providers/aws/docs/diagrams/ # AWS architecture diagram (SVG + Excalidraw source + PNG export)
-providers/aws/docs/reference/ # AWS reference material (original exercise baseline)
-.framework/constitution/ # Active mission, technical constraints, roadmap, and framework diagrams
-modules/             # Reusable Terraform modules (only where justified — none needed yet)
+providers/aws/       # AWS Terraform, Lambda sources, baseline documentation, and diagrams
+providers/gcp/       # GCP bootstrap/workload Terraform, Cloud Run sources, validation, and diagrams
+providers/azure/     # Azure Terraform, Function sources, tests, scripts, operations docs, and diagrams
+docs/contracts/      # Shared Order Pipeline v1 contract
 docs/diagrams/       # Editable multicloud workflow diagram
-.github/workflows/   # CI (fmt + validate, no credentials, no apply)
+modules/             # Reusable Terraform modules, only when justified
+.framework/          # Active AI Together Framework V3 constitution and local ORQ workflow
+.github/workflows/   # Non-mutating CI workflows
 ```
+
+## Non-goals
+
+This project is not a production platform, authentication system, inventory,
+pricing, or reservation engine. It does not provide exactly-once processing,
+multi-account or multi-subscription enterprise operations, sustained traffic,
+production SLOs or SLAs, or fully automated cloud deployment. The underlying
+messaging services use at-least-once semantics, so duplicate delivery may
+occur; each provider documents its own observed duplicate, retry, and DLQ
+behavior.
 
 ## How to deploy
 
@@ -172,12 +210,10 @@ the architect owns decisions, reviews, and every cloud-changing command.
 
 The active project context is maintained in the
 [constitution](.framework/constitution/): mission, technical stack,
-roadmap, and framework diagrams. It defines an AWS baseline first,
-followed by an approved design and implementation path for each additional
-provider. The GCP design and implementation are complete; Azure remains the
-next provider-specific design and implementation path. GCP is deployed
-manually in a development project; identifiers,
-credentials, and billing contacts remain local-only.
+roadmap, and framework diagrams. AWS is the historical baseline; GCP and Azure
+are implemented provider variants with provider-specific validation evidence.
+The next phase is cross-provider consistency, conformance automation, and
+comparison. Identifiers, credentials, and billing contacts remain local-only.
 
 For each substantial change, the workflow is:
 
